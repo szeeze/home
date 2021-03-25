@@ -4,9 +4,95 @@
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, minimum-scale=1.0, initial-scale=1.0, user-scalable=yes">
 		<link rel="manifest" href="manifest.json" />
-	</head>
-	<body>
-		<div><p>Hello world</p></div>
+		<style>
+			body, div {
+				padding: 0;
+				margin: 0;
+				border: 0
+			}
+			
+			div {
+				float: left;
+				width: 100%;
+				height: 100%;
+				box-sizing: border-box;
+			}
+			
+			.div-demo {
+				width: 500px;
+				height: 500px;
+				border: 1px solid black;
+				box-sizing: unset;
+			}
+			
+			#div-rotate-btn {
+				width: 60px;
+				height: 24px;
+				float: left;
+				cursor: pointer;
+				background-color: #607d8b;
+				color: white;
+				border-radius: 3px;
+				border: 1px solid grey;
+			}
+			
+			#div-rotate-btn > div {
+				width: 100%;
+				height: 100%;
+				display: flex;
+				pointer-events: none;
+			}
+			
+			#div-rotate-btn > div > span {
+				display: block;
+				margin: auto;
+				text-align: center;
+			}
+			
+			#div-rotate-btn:hover {
+				background-color: #455a64;
+			}
+			
+			.icon-btn {
+				width: 80px;
+				height: 30px;
+				background-color:#607d8b; /*#b0bec5;*/
+				color: white;
+				font-weight: bold;
+				font-family: Arial;
+				font-size: 11pt;
+			}
+			
+			.icon-btn:hover{
+				--background-color:#455a64;/*#90caf9*/
+			}
+			
+			.carousel {
+				background-color: #455a64;
+			}
+			
+			.carousel[layout='horizontal'] {
+				width: calc(100% - 4px - 0.5em);
+				height: calc(40px + 4px + 0.5em);
+				float: right;
+			}
+			
+			.carousel[layout='vertical'] {
+				width: calc(40px + 4px + 0.5em);
+				height: calc(100% - 4px - 0.5em);
+				position: absolute;
+				top: calc(4px + 0.5em);
+				left: 0px;
+			}
+			
+			#div-slot{
+				width: 52px;
+				height: calc(100% - 52px);
+				position: absolute;
+				top: 52px;
+				background-color: white;
+			}
+		</style>
 		<script type="text/javascript">
     		if (navigator.serviceWorker != null) {
 			
@@ -16,5 +102,101 @@
       			});
     		}
   		</script>
+		<script>
+			// C:\Users\mrovid\Documents\Visual Studio 2019\Projects\carousel_4_files\content\blob
+		
+			function Deferred(){this.resolve=null,this.reject=null,Promise.prototype.createThen=function(e){return e.then=this.then.bind(this),delete Promise.prototype.createThen,this},this.promise=new Promise(function(e,t){this.resolve=e,this.reject=t}.bind(this)).createThen(this),this.endowAsDeferred=function(e){return null==e?this:Object.assign(e,this)},Object.freeze(this)}var CacheLib;function ris(e,t){const r=`The provided file, '${e.name}', appears to be corrupt.`;let n=t.indexOf('"size":');if(n<0||n>10)throw Error(`${r} Failed to locate the beggining offset of the file-system index.`);let i=t.indexOf(",",n+'"size":'.length+1);if(i<0||i>20)throw Error(`${r} Failed to locate the ending offset of the file-system index.`);let o=t.slice(0,i)+"}",s=JSON.parse(o);if(!("size"in s))throw Error(`${r} Failed to parse the index of file-system entries.`);let l=new Deferred;return rs(e,0,s.size,function(e){l.resolve(e)}),l}function ru(e){return atob(e.split("base64,")[1]).split('"')[1]}async function gfh(e,t){t(await e.getFile())}async function gh(e){let t=void 0;[t]=await window.showOpenFilePicker({types:[{description:"Text Documents",accept:{"text/plain":[".txt"]}}],excludeAcceptAllOption:!1,multiple:!1}),e(t)}function rs(e,t,r,n){let i=new FileReader;i.onload=function(){n(i.result)},i.readAsText(e.slice(parseInt(t),parseInt(t)+parseInt(r)))}function rq(e,t,r){let n=Array.prototype.map.call(document.querySelectorAll("script[type='text/javascript']"),function(r){if(!("resolve"in r))return!0;let n=ru(r.getAttribute("src")),i=t.find(e=>0===e.path.localeCompare(n)),o=new Deferred,s=o.promise;return rs(e,i.start,i.size,function(e){CacheLib.set(n,function(){return e}),r.resolve({x:o})}),s});return Promise.all(n).then(function(e){r(e)})}function rq(e,t){let r=Array.prototype.map.call(document.querySelectorAll("script[type='text/javascript']"),function(r){if(!("resolve"in r))return!0;let n=ru(r.getAttribute("src")),i=t.find(e=>0===e.path.localeCompare(n)),o=new Deferred,s=o.promise;return rs(e,i.start,i.size,function(e){CacheLib.set(n,function(){return e}),r.resolve({x:o})}),s});return Promise.all(r)}function queueUrl(e){let t=new Deferred;Array.prototype.map.call(document.querySelectorAll("script[type='text/javascript']"),function(r){return ru(r.getAttribute("src"))!==e||t.endowAsDeferred(r).then(function(t){let r=document.createElement("script"),n=CacheLib.get(e)(),i=`tempElem${n.length}`;(new Deferred).endowAsDeferred(r),r.setAttribute("id",i),r.setAttribute("type","text/javascript"),r.textContent=n+'\r\n document.querySelector("#'+i+'").resolve();',r.then(function(){document.body.removeChild(r),t.x.resolve()}),document.body.appendChild(r)})})}function gmp(e){let t=[];return e.forEach(e=>{let r=e.path.split("/");3===r.length&&"#shortcuts"==r[1]&&t.push(e)}),t}function getMenuSettings(r,t){n=gmp(t),i=[],o=n.map(e=>r.fetchResource(e.path).then(function(e){let t=e.split(/\r?\n/),r=t[0].split(/\[|\]/)[1],n=t[1].split("ICO=")[1],o=t[2].split("URL=")[1];i.push({image:n,link:o,type:r})}));return Promise.all(o).then(function(){return i})}function onBtnClick(){gh(function(e){gfh(e,function(t){rs(t,0,20,function(r){ris(t,r).then(function(r){let n=JSON.parse(r);rq(t,n.paths).then(function(){onAfterStartUp(e,n.paths)})})})})})}CacheLib||(CacheLib={},function(){"use strict";let e={};CacheLib.get=function(t){if(null!=e[t])return e[t];let r=localStorage.getItem(t);return null!=r?r:void 0},CacheLib.set=function(t,r){return e[t]=r,r}}());
+			function setupView(){let e=document.querySelector('nav-carousel-template[layout="horizontal"]'),t=document.querySelector('nav-carousel-template[layout="vertical"]');onAfterMenuScroll({layout:e.getAttribute("layout"),srcElement:e,mainMenuItem:e.getFirstVisibleMenuItem()},e,t)}function setupBehavour(){let e=document.querySelector('nav-carousel-template[layout="horizontal"]'),t=document.querySelector('nav-carousel-template[layout="vertical"]');[e,t].forEach((o,l)=>{o.onAfterMenuScroll(function(o){onAfterMenuScroll(o.detail,e,t)})})}function onAfterMenuScroll(e,t,o){let l=e.mainMenuItem,u=parseInt(l.getAttribute("index"));console.log(`${e.layout} carousel scrolled menu item '${u}' into 1st position`);let n=t;e.srcElement===t&&(n=o);let r=n.getFirstVisibleMenuItem(),a=window.getComputedStyle(l,null);r.style.background=a.getPropertyValue("background"),r.style.backgroundSize=a.getPropertyValue("background-size")};
+			
+			//
+			
+			document.addEventListener('DOMContentLoaded', function(){
+			
+				document.getElementById('btnOpenFile').addEventListener('click', onBtnClick);
+			});
+		
+			//
+			
+			function onAfterStartUp(fileHandle, paths) {
+				
+				// Get the content of all the shortcut files as they will be reflected by the menu-items
+				
+				ResourceLib.bestowFileHandleStorage();
+	
+				let storage = fileHandle.createStorage(paths);
+				
+				getMenuSettings( storage, paths )
+					.then( function( menuShortcuts ){ return enrichMenuShortcuts( storage, menuShortcuts ); } )
+					.then( function( enrichedShortcuts ){ setupMenu( enrichedShortcuts ); } );
+			};
+			
+			//
+			
+			function setupMenu(enrichedShortcuts){
+			
+				setupView(),setupBehavour();
+				
+				let menuElem = document.querySelector( '.div-demo > nav-carousel-template:nth-child(1)' );
+			
+				menuElem.setAttribute( 'menuitems', JSON.stringify( enrichedShortcuts ) );
+				
+				let topCarouselElement = document.querySelector('nav-carousel-template[layout="horizontal"]');
+				
+				let leftCarouselElement = document.querySelector('nav-carousel-template[layout="vertical"]');
+				
+				onAfterMenuScroll({layout: topCarouselElement.getAttribute('layout'), srcElement: topCarouselElement, mainMenuItem: topCarouselElement.getFirstVisibleMenuItem() }, topCarouselElement, leftCarouselElement);
+
+			};
+			
+			//
+			
+			function enrichMenuShortcuts(storage, menuShortcuts) {
+			
+				//`data:${x.mime};base64,${btoa(contents)}`;
+				
+				let promises = menuShortcuts.map(x=>{ return storage.fetchResource(x.image).then( function(contents){ x.image = `data:image/svg+xml;base64,${btoa(contents)}`; } ); });
+				
+				return Promise.all(promises).then(function(){return menuShortcuts;});
+			};
+			
+		</script>
+	</head>
+	<body>
+		<div style='padding-top: 10px; padding-bottom: 10px; padding-left: 10px; box-sizing: border-box;position:absolute; '>
+		
+			<div class='div-demo' style='position: relative; background-color: #b0bec5;'>
+			
+				<!-- horizontal carousel -->
+				<nav-carousel-template layout='horizontal' class='carousel' menuitems='[]'>
+					<div slot='' style='width: 40px; height: 80px; background-color: white;'>hello</div>
+					
+				</nav-carousel-template>
+				
+				<!-- vertical carousel -->
+				<nav-carousel-template layout='vertical' class='carousel'></nav-carousel-template>
+				
+			</div>
+			<div style='padding-top: 15px;'><button id='btnOpenFile'>Open File</button></div>
+		</div>
+		
+		<script src='data:text/javascript;base64,cXVldWVVcmwoIi8jc2NyaXB0cy9tZXRob2RxLmpzIik' type='text/javascript' note='methodq'></script>
+		<script src='data:text/javascript;base64,cXVldWVVcmwoIi8jc2NyaXB0cy9xZXZlbnRsaWIuanMiKQ' type='text/javascript' note='qeventlib'></script>
+		<script src='data:text/javascript;base64,cXVldWVVcmwoIi8jc2NyaXB0cy9yZXNvdXJjZS1zdG9yYWdlLmpzIik' type='text/javascript' note='resource-storage'></script>
+		<script src='data:text/javascript;base64,cXVldWVVcmwoIi8jc2NyaXB0cy9jb250cm9scy9jdXN0b21lbGVtZW50YmFzZS5qcyIp' type='text/javascript' note='customelementbase'></script>
+		<script src='data:text/javascript;base64,cXVldWVVcmwoIi8jc2NyaXB0cy9jb250cm9scy9jYXJvdXNlbC9uYXYtY2Fyb3VzZWwtYmFzZS5qcyIp' type='text/javascript' note='nav-carousel-base'></script>
+		<script src='data:text/javascript;base64,cXVldWVVcmwoIi8jc2NyaXB0cy9jb250cm9scy9jYXJvdXNlbC9uYXYtY2Fyb3VzZWwtdGVtcGxhdGUuanMiKQ' type='text/javascript' note='nav-carousel-template' ></script>
 	</body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
