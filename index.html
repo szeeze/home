@@ -10,7 +10,7 @@
 		<script type="text/javascript">
     		if (navigator.serviceWorker != null) {
 			
-      			navigator.serviceWorker.register('sw.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' })
+      			navigator.serviceWorker.register('sw.js', { registrationStrategy: 'registerImmediately' })
       			.then(function(registration) {
         			console.log('Registered events at scope: ', registration.scope);
       			});
