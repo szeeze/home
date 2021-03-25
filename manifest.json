@@ -2,7 +2,7 @@
   "name": "Szeeze PWA",
   "short_name": "Szeeze PWA",
   "display": "standalone",
-  "start_url": "/",
+  "start_url": "index.html",
   "theme_color": "#313131",
   "background_color": "#313131",
   "icons": [
