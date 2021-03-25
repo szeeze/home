@@ -2,7 +2,6 @@ console.log('Script loaded!')
 var cacheStorageKey = 'szeeze-pwa-1'
 
 var cacheList = [
-  "/",
   "e.png",
 ]
 
