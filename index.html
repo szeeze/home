@@ -9,7 +9,8 @@
 		<div><p>Hello world</p></div>
 		<script type="text/javascript">
     		if (navigator.serviceWorker != null) {
-      			navigator.serviceWorker.register('sw.js')
+			
+      			navigator.serviceWorker.register('sw.js', { enabled: environment.production, registrationStrategy: 'registerImmediately' })
       			.then(function(registration) {
         			console.log('Registered events at scope: ', registration.scope);
       			});
