@@ -14,66 +14,15 @@
     		}
   		</script>
 		<script type='text/javascript'>
-			
-			class CustomElementBase extends HTMLElement{constructor(){super()}connectedCallback(){this.render()}attributeChangedCallback(t,e,s){e!==s&&null!=this.getAttribute(t)&&(this[t]=s)}render(){if(!this.initialize||!this.markup)return;this.initialize();let t=this.markup(),e=document.createElement("div");e.innerHTML=t,this.attachShadow({mode:"open"}).appendChild(e.firstChild.content.cloneNode(!0))}get class(){if(!0===this.hasAttribute("class"))return this.getAttribute("class")}set class(t){if(!t)return void this.removeAttribute("class");let e=this.customStyleAttributes;if(!e||0===e.length)return void this.setAttribute("class",t);let s=this.ownerDocument.styleSheets,r=[],i=0,l=0;for(;i<s.length;i++){let e=s[i].rules;for(l=0;l<e.length;l++){0===this.classNameFromSelector(e[l].selectorText).localeCompare(`.${t}`)&&r.push(s[i].rules[l])}}for(let t of r){let s=t.style.cssText.trim().split(";");for(let r of s){let s=r.trim().split(":");if(s.length<2)continue;let i=s[0].trim(),l=s[1].trim();for(let s of e)0===i.localeCompare(s)&&(t.style.removeProperty(r.styleName),t.style.setProperty(`--${i}`,l))}}this.setAttribute("class",t)}classNameFromSelector(t){return t.split(/(?:\[|\:)+/)[0].trim()}get style(){return super.style}set style(t){let e=this.customStyleAttributes;if(!t||!this.customStyleAttributes||0===this.customStyleAttributes.length)return void super.setAttribute("style",t);let s=[],r=t.split(";");for(let t of r){let r=t.trim();if(0===r.length)continue;let i=r.split(":"),l=i[0].trim(),n=i[1].trim(),o=0;for(;o<e.length;o++)if(0===l.localeCompare(e[o])){s.push({name:`--${l}`,value:n});break}o>=e.length&&l.length>0&&s.push({name:l,value:n})}super.setAttribute("style",s.map(function(t){return`${t.name}:${t.value}`}).join(";")+";")}}customElements.define("frame-template",class extends CustomElementBase{constructor(){super()}initialize(){}enslotMarkup(t,e){this.innerHTML=e;let r=0,n=[],c=document.querySelectorAll('frame-template script[type="text/javascript"]');for(let t of c)n.push(void 0);let l=Array.prototype.map.call(c,e=>{let c=r++,l=e.getAttribute("src");return t.fetchResource(l).then(function(t){n[c]=t})});return Promise.all(l).then(function(){let t=URL.createObjectURL(new Blob([n.join("\r\n")],{type:"text/javascript"})),e=import(t);return URL.revokeObjectURL(t),e})}markup(){return this.markup()}markup(){let t=this.style.width?this.style.width:0,e=this.style.height?this.style.height:0;return this.cm(t,e)}cm(t,e){return atob('PHRlbXBsYXRlIGlkPSdmcmFtZS10ZW1wbGF0ZSc+PGRpdiBjbGFzcz0nZGl2LWNvbnRhaW5lcic+PHNsb3QgbmFtZT0nY29udGVudCc+PC9zbG90PjwvZGl2PjxzdHlsZT46aG9zdHstLXdpZHRoOnt9O31kaXZ7bWFyZ2luOjA7Ym9yZGVyOjA7cGFkZGluZzowO2JveC1zaXppbmc6Ym9yZGVyLWJveH0uZGl2LWNvbnRhaW5lcnt3aWR0aDp2YXIoLS13aWR0aCk7aGVpZ2h0OnZhcigtLWhlaWdodCk7YmFja2dyb3VuZC1jb2xvcjp2YXIoLS1iYWNrZ3JvdW5kLWNvbG9yKX08L3N0eWxlPjwvdGVtcGxhdGU+')}static get observedAttributes(){return["style","class"]}get customStyleAttributes(){return["width","height","background-color"]}});
-			
-			function Deferred(){this.resolve=null,this.reject=null,Promise.prototype.createThen=function(e){return e.then=this.then.bind(this),delete Promise.prototype.createThen,this},this.promise=new Promise(function(e,t){this.resolve=e,this.reject=t}.bind(this)).createThen(this),this.endowAsDeferred=function(e){return null==e?this:Object.assign(e,this)},Object.freeze(this)}var CacheLib;function f_ri(e,t){const n=`The provided file, '${e.name}', appears to be corrupt.`;let r=t.indexOf('"size":');if(r<0||r>10)throw Error(`${n} Failed to locate the beggining offset of the file-system index.`);let i=t.indexOf(",",r+'"size":'.length+1);if(i<0||i>20)throw Error(`${n} Failed to locate the ending offset of the file-system index.`);let s=t.slice(0,i)+"}",o=JSON.parse(s);if(!("size"in o))throw Error(`${n} Failed to parse the index of file-system entries.`);return f_rf(e,0,o.size)}function f_rf(e,t,n){let r=new FileReader,i=new Deferred;return r.onload=function(){i.resolve(r.result)},r.readAsText(e.slice(parseInt(t),parseInt(t)+parseInt(n))),i}function onStart(e){return f_rf(e,0,20).then(function(t){return{a:e,b:t}}).then(function(e){return f_ri(e.a,e.b).then(function(t){return{file:e.a,paths:JSON.parse(t)}})})}CacheLib||(CacheLib={},function(){"use strict";let e={};CacheLib.get=function(t){if(null!=e[t])return e[t];let n=localStorage.getItem(t);return null!=n?n:void 0},CacheLib.set=function(t,n){return e[t]=n,n}}());
-			
-			//
-			
-			function onFileSelected(inputElement) {
-			
-				if(inputElement.files.length !== 1) return true;
-				
-				onStart(inputElement.files[0])
-					.then(function( response ){ return initStorage(response.file,response.paths.paths) })
-					.then(function( response ){
-		
-						ResourceLib.bestowFileStorage(); let storage = inputElement.files[0].createStorage(response.paths);
-					
-						let frameElem = document.getElementsByTagName('frame-template')[0];
-						
-						startApp(frameElem, storage, response.paths);
-					});
-			};
-			
-			//
-			
-			function startApp(frameElement, storage, paths) {
-				
-				window.getStorage = function(){return storage}; window.getPaths = function(){return paths};
-				
-				storage.fetchResource('/#root/documents/gobble/gobble.app').then(function(response){
-				
-					frameElement.enslotMarkup(storage,response);
-				});
-			};
-			
-			//
-			
-			function initStorage(file, paths) {
-			
-				let scriptPaths = []; let elemDefer = new Deferred(); let defer = new Deferred();
-				
-				paths.map(x=> {if(x.path=='/#scripts/resource-cache.js' || x.path=='/#scripts/resource-storage.js') scriptPaths.push(x);});
-				
-				Promise.all( scriptPaths.map(x => { return f_rf(file, x.start, x.size); }) ).then( function(readResponses){
-				
-					let elemId = `tempElem-storage`; 
-					
-					readResponses.push(`document.getElementById('${elemId}').resolve();`);
-					
-					let elem = document.createElement('script'); elem.setAttribute('type', 'text/javascript');
-					
-					elem.setAttribute('id', elemId); elem.textContent = readResponses.join('\r\n');
-					
-					elemDefer.endowAsDeferred(elem); elem.then(function(){ document.body.removeChild(elem); defer.resolve({ file: file, paths: paths }) });
-					
-					document.body.appendChild(elem);
-				});
-				
-				return defer;
-			};
+			function Deferred(){this.resolve=null,this.reject=null,Promise.prototype.createThen=function(e){return e.then=this.then.bind(this),delete Promise.prototype.createThen,this},this.promise=new Promise(function(e,t){this.resolve=e,this.reject=t}.bind(this)).createThen(this),this.endowAsDeferred=function(e){return null==e?this:Object.assign(e,this)},Object.freeze(this)};
+			var CacheLib;CacheLib||(CacheLib={},function(){"use strict";let e={};CacheLib.get=function(t){if(null!=e[t])return e[t];let r=localStorage.getItem(t);return null!=r?r:void 0},CacheLib.set=function(t,r){return e[t]=r,r}}());
+			class CustomElementBase extends HTMLElement{constructor(){super()}connectedCallback(){this.render()}attributeChangedCallback(e,t,r){t!==r&&null!=this.getAttribute(e)&&(this[e]=r)}render(){if(!this.initialize||!this.markup)return;this.initialize();let e=this.markup(),t=document.createElement("div");t.innerHTML=e,this.attachShadow({mode:"open"}).appendChild(t.firstChild.content.cloneNode(!0))}get class(){if(!0===this.hasAttribute("class"))return this.getAttribute("class")}set class(e){if(!e)return void this.removeAttribute("class");let t=this.customStyleAttributes;if(!t||0===t.length)return void this.setAttribute("class",e);let r=this.ownerDocument.styleSheets,s=[],i=0,n=0;for(;i<r.length;i++){let t=r[i].rules;for(n=0;n<t.length;n++)0===this.classNameFromSelector(t[n].selectorText).localeCompare(`.${e}`)&&s.push(r[i].rules[n])}for(let e of s){let r=e.style.cssText.trim().split(";");for(let s of r){let r=s.trim().split(":");if(r.length<2)continue;let i=r[0].trim(),n=r[1].trim();for(let r of t)0===i.localeCompare(r)&&(e.style.removeProperty(s.styleName),e.style.setProperty(`--${i}`,n))}}this.setAttribute("class",e)}classNameFromSelector(e){return e.split(/(?:\[|\:)+/)[0].trim()}get style(){return super.style}set style(e){let t=this.customStyleAttributes;if(!e||!this.customStyleAttributes||0===this.customStyleAttributes.length)return void super.setAttribute("style",e);let r=[],s=e.split(";");for(let e of s){let s=e.trim();if(0===s.length)continue;let i=s.split(":"),n=i[0].trim(),l=i[1].trim(),o=0;for(;o<t.length;o++)if(0===n.localeCompare(t[o])){r.push({name:`--${n}`,value:l});break}o>=t.length&&n.length>0&&r.push({name:n,value:l})}super.setAttribute("style",r.map(function(e){return`${e.name}:${e.value}`}).join(";")+";")}};
+			customElements.define("frame-template",class extends CustomElementBase{constructor(){super()}initialize(){}enslotMarkup(e,t){this.innerHTML=t;let r=0,s=[],i=document.querySelectorAll('frame-template script[type="text/javascript"]');for(let e of i)s.push(void 0);let n=Array.prototype.map.call(i,t=>{let i=r++,n=t.getAttribute("src");return e.fetchResource(n).then(function(e){s[i]=e})});return Promise.all(n).then(function(){let e=URL.createObjectURL(new Blob([s.join("\r\n")],{type:"text/javascript"})),t= fetch(e).then(function(fr){return fr.text().then(function(frt){ return eval(frt)})});return URL.revokeObjectURL(e),t})}markup(){return this.markup()}markup(){let e=this.style.width?this.style.width:0,t=this.style.height?this.style.height:0;return this.cm(e,t)}cm(e,t){return atob("PHRlbXBsYXRlIGlkPSdmcmFtZS10ZW1wbGF0ZSc+PGRpdiBjbGFzcz0nZGl2LWNvbnRhaW5lcic+PHNsb3QgbmFtZT0nY29udGVudCc+PC9zbG90PjwvZGl2PjxzdHlsZT46aG9zdHstLXdpZHRoOnt9O31kaXZ7bWFyZ2luOjA7Ym9yZGVyOjA7cGFkZGluZzowO2JveC1zaXppbmc6Ym9yZGVyLWJveH0uZGl2LWNvbnRhaW5lcnt3aWR0aDp2YXIoLS13aWR0aCk7aGVpZ2h0OnZhcigtLWhlaWdodCk7YmFja2dyb3VuZC1jb2xvcjp2YXIoLS1iYWNrZ3JvdW5kLWNvbG9yKX08L3N0eWxlPjwvdGVtcGxhdGU+")}static get observedAttributes(){return["style","class"]}get customStyleAttributes(){return["width","height","background-color"]}});
+			function onFileSelected(e){if(1!==e.files.length)return!0;onStart(e.files[0]).then(function(e){return initStorage(e.file,e.paths.paths)}).then(function(t){ResourceLib.bestowFileStorage();let r=e.files[0].createStorage(t.paths);startApp(document.getElementsByTagName("frame-template")[0],r,t.paths)})};
+			function onStart(e){return f_rf(e,0,20).then(function(t){return{a:e,b:t}}).then(function(e){return f_ri(e.a,e.b).then(function(t){return{file:e.a,paths:JSON.parse(t)}})})};
+			function f_ri(e,t){const r=`The provided file, '${e.name}', appears to be corrupt.`;let s=t.indexOf('"size":');if(s<0||s>10)throw Error(`${r} Failed to locate the beggining offset of the file-system index.`);let i=t.indexOf(",",s+'"size":'.length+1);if(i<0||i>20)throw Error(`${r} Failed to locate the ending offset of the file-system index.`);let n=t.slice(0,i)+"}",l=JSON.parse(n);if(!("size"in l))throw Error(`${r} Failed to parse the index of file-system entries.`);return f_rf(e,0,l.size)}function f_rf(e,t,r){let s=new FileReader,i=new Deferred;return s.onload=function(){i.resolve(s.result)},s.readAsText(e.slice(parseInt(t),parseInt(t)+parseInt(r))),i};
+			function startApp(e,t,r){window.getStorage=function(){return t},window.getPaths=function(){return r},t.fetchResource("/#root/documents/gobble/gobble.app").then(function(r){e.enslotMarkup(t,r)})};
+			function initStorage(e,t){let r=[],s=new Deferred,i=new Deferred;return t.map(e=>{"/#scripts/resource-cache.js"!=e.path&&"/#scripts/resource-storage.js"!=e.path||r.push(e)}),Promise.all(r.map(t=>f_rf(e,t.start,t.size))).then(function(r){r.push("document.getElementById('tempElem-storage').resolve();");let n=document.createElement("script");n.setAttribute("type","text/javascript"),n.setAttribute("id","tempElem-storage"),n.textContent=r.join("\r\n"),s.endowAsDeferred(n),n.then(function(){document.body.removeChild(n),i.resolve({file:e,paths:t})}),document.body.appendChild(n)}),i};
 		</script>
 		<style>
 			body, div {
@@ -99,7 +48,6 @@
 						width: 100%;
 						height: 70%;
 						display: flex;
-						/*padding-top: 100px;*/
 					}
 						
 					#div-start {
@@ -121,3 +69,21 @@
 		</div>
 	</body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
